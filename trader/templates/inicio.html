@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block head_title %}
+{{ super() }}: inicio
+{% endblock %}
+
+{% block page_title %}
+Listado de movimientos
+{% endblock %}
+
+{% block contenido %}
+{{ super() }}
+<table class="paper">
+  <tr>
+    <th class="titulo-tabla">Fecha</th>
+    <th class="titulo-tabla">Hora</th>
+    <th class="titulo-tabla">Moneda From →</th>
+    <th class="titulo-tabla numero">= Q0</th>
+    <th class="titulo-tabla">→ Moneda To</th>
+    <th class="titulo-tabla numero">= Q1</th>
+    <th class="titulo-tabla numero">P.U</th>
+  </tr>
+  {% if movs %}
+  {% for mov in movs %}
+  <tr>
+    <td>
+      {% if mov.fecha %}
+        {{ mov.fecha }}
+      {% else %}
+        ---
+      {% endif %}
+    </td>
+    <td>
+      {% if mov.hora %}
+        {{ mov.hora }}
+      {% else %}
+        ---
+      {% endif %}     
+    </td>
+    <td> {{ mov.moneda_from }} </td>
+    <td class="numero">{{ mov.cantidad_from }}</td>
+    <td> {{ mov.moneda_to }} </td>
+    <td class="numero">{{ mov.cantidad_to }}</td>
+    <td class="numero"> {{ (mov.cantidad_from / mov.cantidad_to)|round(3, 'common') }} </td>
+  </tr>
+  {% if mov.errores %}
+  <tr>
+    <td colspan="4" class="error">
+      {% for error in mov.errores %}
+        { error }}.
+      {% endfor %}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  {% else %}
+  <tr>
+    <td colspan="4" class="lista-vacia">No hay movimientos que mostrar</td>
+  </tr>
+  {% endif %}
+</table>
+{% endblock %}

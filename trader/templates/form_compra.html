@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block head_title %}
+{{ super() }}: Comprar 
+{% endblock %}
+
+
+{% block page_title %}
+Compra/Venta de criptos 
+{% endblock %}
+
+{% block contenido %}
+{{ super()}}
+
+
+<form action="/comprar" method="POST">
+  {{ form.csrf_token }}
+  {{ form.id() }}
+
+  <div class="left">
+
+    <div class="campo-formulario-from">
+      {{ form.moneda_from.label }}
+      {{ form.moneda_from }}
+    </div>
+  
+    <div class="campo-formulario-from">
+      {{ form.cantidad_from.label}}
+      {{ form.cantidad_from }}
+    </div>
+
+    <div class="acciones">
+      {{ form.consulta_api }}
+    </div>
+  </div>
+
+  <div class="right">
+
+    <div class="campo-formulario-to">
+      {{ form.moneda_to.label}}
+      {{ form.moneda_to }}
+    </div>
+    <div class="moneda-to">
+      <label for="cantidad_to">Q:</label>
+      <p></p>
+    </div>
+  </div>
+
+
+
+
+
+<!--   <div class="acciones">
+    {{ form.cancelar }}
+  </div>
+
+  <div class="acciones">
+    {{ form.guardar }}
+  </div> -->
+
+
+</form>
+{% endblock%}

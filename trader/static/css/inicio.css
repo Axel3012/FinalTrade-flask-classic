@@ -1,0 +1,14 @@
+table.paper {
+  width: 100%;
+  max-width: 830px;
+  justify-content: center;
+}
+
+.titulo-tabla{
+  border-bottom: #075e4e 2px solid;
+  text-align: left;
+}
+
+.numero {
+  text-align: right;
+}

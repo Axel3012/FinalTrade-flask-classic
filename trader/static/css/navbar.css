@@ -1,0 +1,15 @@
+.navbar {
+  position: fixed;
+}
+
+nav {
+  background-color: #2accbf;
+  color: white;
+  height: 25px;
+  line-height: 25px;
+  padding-left: 25px;
+}
+
+nav.main-menu a {
+  color: white;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block head_title %} EasyTrade {% endblock %}</title>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" 
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../static/css/skeuos.css">
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <link rel="stylesheet" href="../static/css/navbar.css">
+  <link rel="stylesheet" href="../static/css/header.css">
+  <link rel="stylesheet" href="../static/css/reset.css">
+  <link rel="stylesheet" href="../static/css/compra.css">
+  <link rel="stylesheet" href="../static/css/inicio.css">
+</head>
+
+<body>
+  {% include 'components/header.html' %}
+  {% include 'components/navbar.html' %}
+
+  <main>
+    {% block contenido %}
+    <h1>{% block page_title %}{% endblock %}</h1>
+    {% endblock%}
+  </main>
+
+  {% include 'components/footer.html'%}
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+
+header {
+  position: relative;
+  background-color: #35393c;
+  color: #f5fbef;
+  height: 50px;
+  font-size: large;
+  line-height: 54px;
+  padding-left: 25px;
+  top: 0;
+  left: 0;
+}
+
+header > h4 {
+  position: absolute;
+  margin: 0;
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 50px;
+}
+
+span.logo {
+  position: relative;
+  display: inline-block;
+  font-family: 'Caveat',cursive;
+  font-weight: 700;
+}
+

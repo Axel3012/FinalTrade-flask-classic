@@ -1,0 +1,38 @@
+
+
+main {
+    display: flex;
+    max-width: 1200px;
+    margin:auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+h1 {
+    margin: 0  200px  ;
+  }
+
+
+
+table.paper .error{
+    font-size: small;
+    padding-left: 40px;
+    color: #900;
+}
+
+.pie-de-pagina{
+    margin-top: 40px;
+    padding: 20px;
+    border-top: solid 1px #000;
+}
+
+.lista-vacia{
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+/* Estios del formulario */
+
+
