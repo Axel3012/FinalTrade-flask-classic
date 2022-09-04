@@ -1,4 +1,7 @@
 import sqlite3
+import requests
+
+from . import APIKEY
 
 '''
 SELECT id,fecha,hora,moneda_from,cantidad_from,moneda_to,cantidad_to FROM movimientos ORDER BY fecha
@@ -12,35 +15,19 @@ class DBManager:
         """ 
         TODO Colocar el Try/Except
         """
-        #1. conectar con la base de datos
         conexion = sqlite3.connect(self.ruta)
 
-        #2. abrir un cursor
-        cursor = conexion.cursor()
+        cursor = conexion.cursor()  
 
-        #3. ejecutar consulta SQL
+
         cursor.execute(consulta)
 
-        #4. tratar los datos
-        #    4.1 obtengo los nombres de columna
-        #    4.2 pido todos los datos (registros)
-        #    4.3 recorrer los resultados:
-        #        4.3.1 crear un diccionario
-        #            - recorro la lista de los nombres de columna
-        #            - para cada columna: nombre + valor
-        #        4.3.2 guardar en la lista de movimientos
-        
-        #[ {'nom_col1' : 'val_col1', ...} ]
         self.movimientos = []
         nombres_columna = []
 
         for desc_columna in cursor.description:
             nombres_columna.append(desc_columna[0])
-
-        # nombres_columnas = ['id', 'fecha', 'hora',
-        #                    'moneda_from', 'cantidad_from'
-        #                    'moneda_to, cantiad_to]
-
+            
         datos = cursor.fetchall()
         for dato in datos:
             movimiento = {}
@@ -54,5 +41,53 @@ class DBManager:
 
         return self.movimientos
 
-   
+    def consultaConParametros(self, consulta, params):
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        resultado = False
+        try:
+            cursor.execute(consulta, params)
+            conexion.commit()
+            resultado = True
+        except Exception as error:
+            print("ERROR DB:", error)
+            conexion.rollback()
+        conexion.close()
 
+        return resultado
+
+class APIError(Exception):
+    pass
+
+class CriptoModel:
+    
+    def __init__(self) -> None:
+        '''
+        Construye un objeto con las monedas origen y destino y el cambio obtenido desde CoinAPI inicializado a cero.
+        '''
+        self.moneda_from = ''
+        self.moneda_to = ''
+        self.cambio = 0.0
+
+    def consultar_cambio(self):
+        '''
+        Consulta el cambio entre la moneda origen y la moneda destino
+        utilizando la API REST CoinAPI
+        '''
+
+        headers = {
+            'X-CoinAPI-Key': APIKEY
+        }
+        api_url = 'http://rest.coinapi.io'
+        endpoint = f'/v1/exchangerate/{self.moneda_from}/{self.moneda_to}'
+        url = api_url + endpoint
+        respuesta = requests.get(url, headers=headers)
+
+        if respuesta.status_code == 200:
+            print(respuesta.json())
+            self.cambio = respuesta.json()["rate"]
+
+        else:
+            raise APIError(
+                'Error {} {} en la API'.format(
+                    respuesta.status_code, respuesta.reason))

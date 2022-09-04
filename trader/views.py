@@ -1,10 +1,10 @@
 
 from flask import render_template, request, url_for, redirect
-from . import app
-from .forms import ComprasForm
-from .models import DBManager
 
-RUTA = 'data/trade.db'
+from . import app
+from . import RUTA
+from .forms import ComprasForm
+from .models import DBManager, CriptoModel
 
 @app.route('/')
 def movimientos():
@@ -24,8 +24,21 @@ def comprar():
         return(render_template('form_compra.html', form=formulario))
 
     elif request.method == 'POST':
-        pass
-    #return render_template('comprar.html', compra=False)
+        form = ComprasForm(data=request.form)
+        cripto_cambio = CriptoModel()
+        if form.validate():
+            db = DBManager(RUTA)
+            if form.consulta_api.data:
+                cripto_cambio.moneda_from = form.moneda_from.data
+                cripto_cambio.moneda_to = form.moneda_to.data
+                cantidad_from = form.cantidad_from.data
+                cambio = cripto_cambio.consultar_cambio()
+                cantidad_to = cantidad_from * cambio
+                return render_template(
+                    'form_compra.html', form = form,
+                        cantidad_to = cantidad_to,
+                        precio_unitario = cambio)
+
 
 @app.route('/status')
 def status():
