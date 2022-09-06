@@ -86,6 +86,7 @@ class CriptoModel:
         if respuesta.status_code == 200:
             print(respuesta.json())
             self.cambio = respuesta.json()["rate"]
+            return(self.cambio)
 
         else:
             raise APIError(

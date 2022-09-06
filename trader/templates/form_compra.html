@@ -40,28 +40,23 @@ Compra/Venta de criptos
       {{ form.moneda_to.label}}
       {{ form.moneda_to }}
     </div>
+
     <div class="moneda-to">
       <label for="cantidad_to">Q:</label>
-      <p> {{ form.cantidad_to }}</p>
+      <p class="paper-label"> {{ cantidad_to }}</p>
     </div>
+
     <div class="precio_unitario">
       <label for="precio_unitario">P.U:</label>
-      <p> {{ form.precio_unitario }}</p>
+      <p class="paper-label"> {{ precio_unitario }}</p>
     </div>
+
+    <div class="acciones">
+      {{ form.cancelar }}
+      {{ form.guardar }}
+    </div>
+
   </div>
-
-
-
-
-
-<!--   <div class="acciones">
-    {{ form.cancelar }}
-  </div>
-
-  <div class="acciones">
-    {{ form.guardar }}
-  </div> -->
-
 
 </form>
 {% endblock%}

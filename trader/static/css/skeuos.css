@@ -144,7 +144,7 @@ button, .checktext input + span, .blue-button, .checktext input:checked + span, 
   border: 0;
   text-transform: capitalize;
   padding: 10px 0;
-  width: 8em;
+  width: 4.5em;
   text-align: center;
   cursor: pointer;
   color: inherit;
@@ -344,4 +344,19 @@ blockquote {
   border-radius: 4px;
   box-shadow: 0 5px 30px 0 rgba(0, 0, 0, 0.05);
   border-left: 6px solid #367bf0; }
+
+.paper-label {
+  background-color: #f2f3f7;
+  border-radius: 10px;
+  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.1), -6px -6px 10px white ;
+  display: flex;
+  margin: 10px 0 ;
+  padding: 0 1.25em;
+  min-height: 1.2em;
+  width: 220px;
+  height: 3.5em;
+  font-size: 1.1em;
+
+  align-items: center;
+}
 
