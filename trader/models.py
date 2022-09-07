@@ -16,18 +16,12 @@ class DBManager:
         TODO Colocar el Try/Except
         """
         conexion = sqlite3.connect(self.ruta)
-
         cursor = conexion.cursor()  
-
-
         cursor.execute(consulta)
-
         self.movimientos = []
         nombres_columna = []
-
         for desc_columna in cursor.description:
-            nombres_columna.append(desc_columna[0])
-            
+            nombres_columna.append(desc_columna[0]) 
         datos = cursor.fetchall()
         for dato in datos:
             movimiento = {}
@@ -38,7 +32,7 @@ class DBManager:
             self.movimientos.append(movimiento)
 
         conexion.close()
-
+        
         return self.movimientos
 
     def consultaConParametros(self, consulta, params):

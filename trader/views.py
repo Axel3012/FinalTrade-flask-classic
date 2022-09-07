@@ -41,6 +41,9 @@ def comprar():
                         cantidad_to = cantidad_to,
                         precio_unitario = cambio)
 
+            elif form.cancelar.data:
+                return redirect(url_for('comprar'))
+
             elif form.guardar.data:
 
                 fecha = date.today().isoformat()
@@ -48,22 +51,25 @@ def comprar():
                     datetime.now().hour,
                     datetime.now().minute,
                     datetime.now().second)
-                consulta = 'INSERT INTO movimientos(fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to) VALUES (fecha=?, hora=?, moneda_from=?, cantidad_from=?, moneda_to=?, cantidad_to=?)'
+                
+                consulta = 'INSERT INTO movimientos(fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to) VALUES (?, ?, ?, ?, ?, ?)'
                 params = (
                     fecha,
-                    hora,
+                    str(hora),
                     form.moneda_from.data,
-                    form.cantidad_from.data,
+                    cantidad_from,
                     form.moneda_to.data,
                     cantidad_to
                 )
 
                 resultado = db.consultaConParametros(consulta, params)
                 if resultado:
-                    return redirect(url_for('inicio'))
+                    return redirect(url_for('movimientos'))
                 return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la operación de guardar en la base de datos"])
             else:
                 return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la validación de los datos"])
+
+            
 
 
 

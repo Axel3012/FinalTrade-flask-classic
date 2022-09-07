@@ -18,8 +18,11 @@ class ComprasForm(FlaskForm):
             message='Moneda de destino obligatoria')])    
 
     consulta_api = SubmitField(
-        'Consulta', render_kw={'class':'blue-button'})
+        'Consulta')
 
-    cancelar = SubmitField('✖')
-    guardar = SubmitField('✓')
+    cancelar = SubmitField(
+        '✖', render_kw={'class':'red-button'})
+        
+    guardar = SubmitField(
+        '✓', render_kw={'class':'guardar-button'})
 
