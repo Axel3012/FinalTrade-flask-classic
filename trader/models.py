@@ -49,6 +49,21 @@ class DBManager:
         conexion.close()
 
         return resultado
+  
+    def solicitudConParametros(self, consulta):
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        resultado = False
+        try:
+            cursor.execute(consulta)
+            dato = cursor.fetchone()
+            resultado = dato
+        except Exception as error:
+            print("ERROR DB:", error)
+
+        conexion.close()
+
+        return resultado
 
 class APIError(Exception):
     pass
@@ -86,3 +101,6 @@ class CriptoModel:
             raise APIError(
                 'Error {} {} en la API'.format(
                     respuesta.status_code, respuesta.reason))
+
+
+    

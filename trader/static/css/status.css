@@ -1,0 +1,16 @@
+.wrapper {
+  margin-top: 40px;
+}
+
+.euros-invertidos{
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.valor-actual {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}

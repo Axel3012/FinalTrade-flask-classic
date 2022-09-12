@@ -2,6 +2,7 @@
 
 main {
     display: flex;
+    position: relative;
     max-width: 1200px;
     margin:auto;
     padding: 0 20px;
@@ -10,7 +11,7 @@ main {
 }
 
 h1 {
-    margin: 0  200px  ;
+    margin: 0  250px  ;
   }
 
 table.paper .error{

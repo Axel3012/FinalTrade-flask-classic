@@ -1,7 +1,7 @@
 from datetime import date, datetime, time
 from flask import render_template, request, url_for, redirect
 
-from . import app
+from . import MONEDAS, MONEDAS1, app
 from . import RUTA
 from .forms import ComprasForm
 from .models import DBManager, CriptoModel
@@ -61,7 +61,7 @@ def comprar():
                     form.moneda_to.data,
                     cantidad_to
                 )
-
+                
                 resultado = db.consultaConParametros(consulta, params)
                 if resultado:
                     return redirect(url_for('movimientos'))
@@ -69,17 +69,37 @@ def comprar():
             else:
                 return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la validación de los datos"])
 
-            
-
-
-
-
-
-
 @app.route('/status')
 def status():
-    return 'Estado del movimiento en euros'
+    cripto_cambio = CriptoModel()
+    db = DBManager(RUTA)
+    valor_criptos_euros = []
+    for moneda in MONEDAS1:
+        consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from= {}'.format(moneda)
+        print(consulta_from)
+        consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to= {}'.format(moneda)
+        cantidad_from = db.solicitudConParametros(consulta_from)
+        if moneda == 'EUR':
+            total_euros = cantidad_from
+        cantidad_to = db.solicitudConParametros(consulta_to)
+        print(cantidad_to, cantidad_from)
+        saldo_cripto = cantidad_to - cantidad_from
+        cripto_cambio.moneda_from = moneda
+        cripto_cambio.moneda_to = 'EUR'
+        cambio_status = cripto_cambio.consultar_cambio()
+        cripto_a_euros = cambio_status * saldo_cripto
+        valor_criptos_euros.append(cripto_a_euros)
 
+    valor_criptos_euros = sum(valor_criptos_euros) + total_euros
+
+    return render_template(
+        'status.html', invertido = total_euros,
+            valor_actual = valor_criptos_euros )
+
+@app.route('/wallet')
+def wallet():
+    return 'Cadidad de Euros o criptomonedas disponibles'
+    
 @app.route('/deposito',methods=['GET','POST'])
 def deposito():
     '''
@@ -87,9 +107,5 @@ def deposito():
     lo hace con el formato de un formulario de tarjeta de credito
     '''
     return 'Deposito a la cuenta en euros'
-
-@app.route('/wallet')
-def wallet():
-    return 'Cadidad de Euros o criptomonedas disponibles'
 
 

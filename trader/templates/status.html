@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head_title %}
+{{ super() }}: Status
+{% endblock %}
+
+{% block page_title %}
+Estado de la inversion
+{% endblock %}
+
+{% block contenido %}
+{{ super()}}
+  
+<div class="wrapper">
+  <div class="invertido">
+    <label class="euros-invertidos" for="euros-invertidos">Invertido:</label>
+    <p class="paper-label">
+      {{ invertido }}
+    </p>
+  </div>
+  <div class="valor-actual">
+    <label class="euros-invertidos" for="valor-actual">Valor actual:</label>
+    <p class="paper-label">
+      {{ valor_actual }}
+    </p>
+  </div>
+</div>
+
+
+{% endblock %}
