@@ -1,5 +1,5 @@
 from datetime import date, datetime, time
-from flask import render_template, request, url_for, redirect
+from flask import flash ,redirect, render_template, request, url_for 
 
 from . import MONEDAS, MONEDAS1, app
 from . import RUTA
@@ -27,47 +27,55 @@ def comprar():
     elif request.method == 'POST':
         form = ComprasForm(data=request.form)
         cripto_cambio = CriptoModel()
-        if form.validate():
-            db = DBManager(RUTA)
-            cripto_cambio.moneda_from = form.moneda_from.data
-            cripto_cambio.moneda_to = form.moneda_to.data
-            cantidad_from = form.cantidad_from.data
-            cambio = cripto_cambio.consultar_cambio()
-            cantidad_to = cantidad_from * cambio
+        if not form.validate():
+            return render_template(
+                "form_compra.html", form=form, id=id, errores=[
+                    "Ha fallado la validación de los datos"])
 
-            if form.consulta_api.data:
-                return render_template(
-                    'form_compra.html', form = form,
-                        cantidad_to = cantidad_to,
-                        precio_unitario = cambio)
+        db = DBManager(RUTA)
+        cripto_cambio.moneda_from = form.moneda_from.data
+        cripto_cambio.moneda_to = form.moneda_to.data
+        cantidad_from = form.cantidad_from.data
+        cambio = cripto_cambio.consultar_cambio()
+        cantidad_to = cantidad_from * cambio
 
-            elif form.cancelar.data:
-                return redirect(url_for('comprar'))
+        if form.moneda_from.data == form.moneda_to.data:
 
-            elif form.guardar.data:
+            flash("Moneda From y Moneda To deben ser diferentes", category="exito")
+            return redirect(url_for('comprar'))
 
-                fecha = date.today().isoformat()
-                hora = time(
-                    datetime.now().hour,
-                    datetime.now().minute,
-                    datetime.now().second)
-                
-                consulta = 'INSERT INTO movimientos(fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to) VALUES (?, ?, ?, ?, ?, ?)'
-                params = (
-                    fecha,
-                    str(hora),
-                    form.moneda_from.data,
-                    cantidad_from,
-                    form.moneda_to.data,
-                    cantidad_to
-                )
-                
-                resultado = db.consultaConParametros(consulta, params)
-                if resultado:
-                    return redirect(url_for('movimientos'))
+        if form.consulta_api.data:
+            return render_template(
+                'form_compra.html', form = form,
+                    cantidad_to = cantidad_to,
+                    precio_unitario = cambio)
+
+        elif form.cancelar.data:
+            return redirect(url_for('comprar'))
+
+        elif form.guardar.data:
+            fecha = date.today().isoformat()
+            hora = time(
+                datetime.now().hour,
+                datetime.now().minute,
+                datetime.now().second)
+            consulta = 'INSERT INTO movimientos(fecha, hora, moneda_from, cantidad_from, moneda_to, cantidad_to) VALUES (?, ?, ?, ?, ?, ?)'
+            params = (
+                fecha,
+                str(hora),
+                form.moneda_from.data,
+                cantidad_from,
+                form.moneda_to.data,
+                cantidad_to)   
+            resultado = db.consultaConParametros(consulta, params)
+            
+            if not resultado:
                 return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la operación de guardar en la base de datos"])
-            else:
-                return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la validación de los datos"])
+
+            flash("Movimiento agregado correctamente ;)", category="exito")
+            return redirect(url_for('movimientos'))
+
+            
 
 @app.route('/status')
 def status():

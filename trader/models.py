@@ -93,7 +93,6 @@ class CriptoModel:
         respuesta = requests.get(url, headers=headers)
 
         if respuesta.status_code == 200:
-            print(respuesta.json())
             self.cambio = respuesta.json()["rate"]
             return(self.cambio)
 
