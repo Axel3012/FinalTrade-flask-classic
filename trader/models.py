@@ -50,14 +50,15 @@ class DBManager:
 
         return resultado
   
-    def solicitudConParametros(self, consulta):
+    def solicitudConParametros(self, consulta, params):
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()
-        resultado = False
+        resultado = 0
         try:
-            cursor.execute(consulta)
+            cursor.execute(consulta, params)
             dato = cursor.fetchone()
-            resultado = dato
+            print(dato)
+            resultado = dato[0]
         except Exception as error:
             print("ERROR DB:", error)
 

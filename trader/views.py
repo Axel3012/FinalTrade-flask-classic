@@ -83,13 +83,15 @@ def status():
     db = DBManager(RUTA)
     valor_criptos_euros = []
     for moneda in MONEDAS1:
-        consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from= {}'.format(moneda)
-        print(consulta_from)
-        consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to= {}'.format(moneda)
-        cantidad_from = db.solicitudConParametros(consulta_from)
+        # TODO: verificar que los datos sean del tipo correcto
+        consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from= ? AND cantidad_from IS NOT NULL'
+        consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to=? AND cantidad_to IS NOT NULL'
+        parametros = (moneda,)
+        # TODO: verificar que la consulta no devuleva los datos nulos
+        cantidad_from = db.solicitudConParametros(consulta_from,params=parametros)
         if moneda == 'EUR':
             total_euros = cantidad_from
-        cantidad_to = db.solicitudConParametros(consulta_to)
+        cantidad_to = db.solicitudConParametros(consulta_to, params=parametros)
         print(cantidad_to, cantidad_from)
         saldo_cripto = cantidad_to - cantidad_from
         cripto_cambio.moneda_from = moneda
