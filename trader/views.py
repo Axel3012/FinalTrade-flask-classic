@@ -9,7 +9,7 @@ from .models import DBManager, CriptoModel
 @app.route('/')
 def movimientos():
     db = DBManager(RUTA)
-    movimientos = db.consultaSQL('SELECT * FROM movimientos')
+    movimientos = db.consultaSQL('SELECT * FROM movimientos ORDER BY fecha DESC, hora DESC LIMIT 15')
     return render_template('inicio.html', movs=movimientos)
 
 @app.route('/comprar', methods=['GET','POST'])
@@ -45,6 +45,9 @@ def comprar():
             return redirect(url_for('comprar'))
 
         if form.consulta_api.data:
+            form.moneda_from.render_kw = {'disabled':True}
+            form.moneda_to.render_kw = {'disabled':True}
+            form.cantidad_from.render_kw = {'readonly':True}
             return render_template(
                 'form_compra.html', form = form,
                     cantidad_to = cantidad_to,
