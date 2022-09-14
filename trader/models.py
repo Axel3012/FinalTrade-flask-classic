@@ -68,7 +68,6 @@ class CriptoModel:
         Consulta el cambio entre la moneda origen y la moneda destino
         utilizando la API REST CoinAPI
         '''
-
         headers = {
             'X-CoinAPI-Key': APIKEY
         }
@@ -76,12 +75,10 @@ class CriptoModel:
         endpoint = f'/v1/exchangerate/{self.moneda_from}/{self.moneda_to}'
         url = api_url + endpoint
         respuesta = requests.get(url, headers=headers)
-
         if respuesta.status_code == 200:
             print(respuesta.json())
             self.cambio = respuesta.json()["rate"]
             return(self.cambio)
-
         else:
             raise APIError(
                 'Error {} {} en la API'.format(

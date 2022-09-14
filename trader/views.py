@@ -69,15 +69,10 @@ def comprar():
             else:
                 return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la validación de los datos"])
 
-            
-
-
-
-
-
 
 @app.route('/status')
 def status():
+    
     return 'Estado del movimiento en euros'
 
 @app.route('/deposito',methods=['GET','POST'])
