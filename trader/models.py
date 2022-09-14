@@ -57,8 +57,11 @@ class DBManager:
         try:
             cursor.execute(consulta, params)
             dato = cursor.fetchone()
+            dato = dato[0]
+            if dato == None:
+                dato = 0
             print(dato)
-            resultado = dato[0]
+            resultado = dato
         except Exception as error:
             print("ERROR DB:", error)
 
