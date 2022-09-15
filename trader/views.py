@@ -45,8 +45,6 @@ def comprar():
             return redirect(url_for('comprar'))
 
         if form.consulta_api.data:
-            form.moneda_from.render_kw = {'disabled':True}
-            form.moneda_to.render_kw = {'disabled':True}
             form.cantidad_from.render_kw = {'readonly':True}
             return render_template(
                 'form_compra.html', form = form,
@@ -56,12 +54,6 @@ def comprar():
         elif form.cancelar.data:
             return redirect(url_for('comprar'))
 
-<<<<<<< HEAD
-
-@app.route('/status')
-def status():
-    
-=======
         elif form.guardar.data:
             fecha = date.today().isoformat()
             hora = time(
@@ -105,7 +97,6 @@ def status():
         cambio_status = cripto_cambio.consultar_cambio()
         cripto_a_euros = cambio_status * saldo_cripto
         valor_criptos_euros.append(cripto_a_euros)
->>>>>>> refector_satus
 
     valor_criptos_euros = sum(valor_criptos_euros) + total_euros
 
@@ -124,5 +115,3 @@ def deposito():
     lo hace con el formato de un formulario de tarjeta de credito
     '''
     return 'Deposito a la cuenta en euros'
-
-
