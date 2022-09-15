@@ -10,6 +10,12 @@ MONEDAS = [("EUR" , "Euro"),
            ("DOGE" , "DogeCoin")
            ]
 
+MONEDAS1 = ["EUR", 
+           "BTC", 
+           "ETH", 
+           "DOGE" 
+           ]
+
 
 app = Flask(__name__)
 app.config.from_prefixed_env()

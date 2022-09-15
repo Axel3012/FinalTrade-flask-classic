@@ -2,6 +2,7 @@
 
 main {
     display: flex;
+    position: relative;
     max-width: 1200px;
     margin:auto;
     padding: 0 20px;
@@ -10,7 +11,7 @@ main {
 }
 
 h1 {
-    margin: 0  200px  ;
+    margin: 0  250px  ;
   }
 
 table.paper .error{
@@ -31,3 +32,30 @@ table.paper .error{
     color: #666;
 }
 
+.lista-errores {
+  background-color: rgba(200, 0, 0, .25);
+  position: relative;
+  color: darkred;
+  border: solid 2px darkred;
+  padding: 2rem;
+  font-size: 1rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.icono-error {
+  margin-right: 1rem;
+  font-size: 32px;
+}
+
+.exito-flash {
+  background-color: rgba(0, 200, 0, .25);
+  color: darkgreen;
+  border: solid 2px darkgreen;
+  padding: 2rem;
+  font-size: 1rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+}

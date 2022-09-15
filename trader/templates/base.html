@@ -6,10 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block head_title %} EasyTrade {% endblock %}</title>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" 
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../static/css/skeuos.css">
   <link rel="stylesheet" href="../static/css/styles.css">
   <link rel="stylesheet" href="../static/css/navbar.css">
@@ -17,6 +14,9 @@
   <link rel="stylesheet" href="../static/css/reset.css">
   <link rel="stylesheet" href="../static/css/compra.css">
   <link rel="stylesheet" href="../static/css/inicio.css">
+  <link rel="stylesheet" href="../static/css/status.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body>
@@ -24,6 +24,22 @@
   {% include 'components/navbar.html' %}
 
   <main>
+
+    {% with mensajes = get_flashed_messages() %}
+      {% if mensajes %}
+        <div class="exito-flash">
+          <p>
+            <ion-icon name="warning-sharp" class="icono-error"></ion-icon>
+          </p>
+          <div class="mensajes-flash">
+            {% for msg in mensajes %}
+              <p>{{ msg }}</p>
+            {% endfor %}
+          </div>      
+        </div>
+      {% endif %}
+    {% endwith %}
+    
     {% block contenido %}
     <h1>{% block page_title %}{% endblock %}</h1>
     {% endblock%}

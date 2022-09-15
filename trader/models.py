@@ -49,6 +49,25 @@ class DBManager:
         conexion.close()
 
         return resultado
+  
+    def solicitudConParametros(self, consulta, params):
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        resultado = 0
+        try:
+            cursor.execute(consulta, params)
+            dato = cursor.fetchone()
+            dato = dato[0]
+            if dato == None:
+                dato = 0
+            print(dato)
+            resultado = dato
+        except Exception as error:
+            print("ERROR DB:", error)
+
+        conexion.close()
+
+        return resultado
 
 class APIError(Exception):
     pass
@@ -76,10 +95,12 @@ class CriptoModel:
         url = api_url + endpoint
         respuesta = requests.get(url, headers=headers)
         if respuesta.status_code == 200:
-            print(respuesta.json())
             self.cambio = respuesta.json()["rate"]
             return(self.cambio)
         else:
             raise APIError(
                 'Error {} {} en la API'.format(
                     respuesta.status_code, respuesta.reason))
+
+
+    
