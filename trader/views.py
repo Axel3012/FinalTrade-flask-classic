@@ -40,8 +40,7 @@ def comprar():
         cantidad_to = cantidad_from * cambio
 
         if form.moneda_from.data == form.moneda_to.data:
-
-            flash("Moneda From y Moneda To deben ser diferentes", category="exito")
+            flash("Moneda From y Moneda To deben ser diferentes", category="warning")
             return redirect(url_for('comprar'))
 
         if form.consulta_api.data:
@@ -81,7 +80,8 @@ def status():
     cripto_cambio = CriptoModel()
     db = DBManager(RUTA)
     valor_criptos_euros = []
-    for moneda in MONEDAS1:
+    for moneda in MONEDAS:
+        moneda = moneda[0]
         consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from=? AND cantidad_from IS NOT NULL'
         consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to=? AND cantidad_to IS NOT NULL'
         parametros = (moneda,)
