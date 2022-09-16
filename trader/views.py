@@ -26,15 +26,20 @@ def comprar():
 
     elif request.method == 'POST':
         form = ComprasForm(data=request.form)
+        moneda_from = form.moneda_from.data
+        moneda_to = form.moneda_to.data
         cripto_cambio = CriptoModel()
+
         if not form.validate():
             return render_template(
                 "form_compra.html", form=form, id=id, errores=[
                     "Ha fallado la validación de los datos"])
 
+        if moneda_from == moneda_to:
+            flash('Moneda From y Moneda To deben ser diferentes', category='warning')
+            return redirect(url_for('comprar'))
+
         db = DBManager(RUTA)
-        moneda_from = form.moneda_from.data
-        moneda_to = form.moneda_to.data
         cripto_cambio.moneda_from = moneda_from
         cripto_cambio.moneda_to = moneda_to
         cantidad_from = form.cantidad_from.data
@@ -43,18 +48,23 @@ def comprar():
 
         consulta_saldo = 'SELECT saldo FROM coins WHERE moneda=?'
         params_saldo = (moneda_from,)
-        saldo = db.solicitudConParametros(
+        saldo_from = db.solicitudConParametros(
             consulta=consulta_saldo, params=params_saldo)
         
-        if saldo < cantidad_from:
+        if saldo_from < cantidad_from:
             flash('Saldo insuficiente', category='warning')
             return redirect(url_for('comprar'))
 
-        
+        consulta_update = 'UPDATE coins SET saldo=? WHERE moneda=?'
+        params_update = (nuevo_saldo_from, moneda_from)
+        nuevo_saldo_from = saldo_from - cantidad_from
+        update = db.consultaConParametros(
+            consulta=consulta_update, params=params_update)
 
-        if form.moneda_from.data == form.moneda_to.data:
-            flash('Moneda From y Moneda To deben ser diferentes', category='warning')
-            return redirect(url_for('comprar'))
+        if not update:
+            return render_template(
+                'form_compra.html', form=form, id=id, errores=[
+                    'Ha fallado la operación de guardar en la base de datos'])
 
         if form.consulta_api.data:
             form.cantidad_from.render_kw = {'readonly':True}
