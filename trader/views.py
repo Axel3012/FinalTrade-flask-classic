@@ -1,7 +1,7 @@
 from datetime import date, datetime, time
 from flask import flash ,redirect, render_template, request, url_for 
 
-from . import MONEDAS, MONEDAS1, app
+from . import MONEDAS, app
 from . import RUTA
 from .forms import ComprasForm
 from .models import DBManager, CriptoModel

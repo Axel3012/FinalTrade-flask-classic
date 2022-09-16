@@ -25,18 +25,18 @@
 
   <main>
 
-    {% with mensajes = get_flashed_messages() %}
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
       {% if mensajes %}
-        <div class="exito-flash">
+        {% for category, msg in mensajes %}
+        <div class="{{ category }}-flash">
           <p>
             <ion-icon name="warning-sharp" class="icono-error"></ion-icon>
           </p>
           <div class="mensajes-flash">
-            {% for msg in mensajes %}
               <p>{{ msg }}</p>
-            {% endfor %}
           </div>      
         </div>
+        {% endfor %}
       {% endif %}
     {% endwith %}
     
