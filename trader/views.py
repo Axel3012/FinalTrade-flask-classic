@@ -33,14 +33,27 @@ def comprar():
                     "Ha fallado la validación de los datos"])
 
         db = DBManager(RUTA)
-        cripto_cambio.moneda_from = form.moneda_from.data
-        cripto_cambio.moneda_to = form.moneda_to.data
+        moneda_from = form.moneda_from.data
+        moneda_to = form.moneda_to.data
+        cripto_cambio.moneda_from = moneda_from
+        cripto_cambio.moneda_to = moneda_to
         cantidad_from = form.cantidad_from.data
         cambio = cripto_cambio.consultar_cambio()
         cantidad_to = cantidad_from * cambio
 
+        consulta_saldo = 'SELECT saldo FROM coins WHERE moneda=?'
+        params_saldo = (moneda_from,)
+        saldo = db.solicitudConParametros(
+            consulta=consulta_saldo, params=params_saldo)
+        
+        if saldo < cantidad_from:
+            flash('Saldo insuficiente', category='warning')
+            return redirect(url_for('comprar'))
+
+        
+
         if form.moneda_from.data == form.moneda_to.data:
-            flash("Moneda From y Moneda To deben ser diferentes", category="warning")
+            flash('Moneda From y Moneda To deben ser diferentes', category='warning')
             return redirect(url_for('comprar'))
 
         if form.consulta_api.data:
@@ -70,9 +83,11 @@ def comprar():
             resultado = db.consultaConParametros(consulta, params)
             
             if not resultado:
-                return render_template("form_compra.html", form=form, id=id, errores=["Ha fallado la operación de guardar en la base de datos"])
+                return render_template(
+                    'form_compra.html', form=form, id=id, errores=[
+                        'Ha fallado la operación de guardar en la base de datos'])
 
-            flash("Movimiento agregado correctamente ;)", category="exito")
+            flash('Movimiento agregado correctamente ;)', category='exito')
             return redirect(url_for('movimientos'))
             
 @app.route('/status')
