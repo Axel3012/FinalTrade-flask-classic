@@ -66,6 +66,8 @@ def comprar():
                 'form_compra.html', form=form, id=id, errores=[
                     'Ha fallado la operación de guardar en la base de datos'])
 
+            """ TODO:Revisar el flujo del programa y hacer el codigo para actualizar el valor del saldo de la moneda to """
+
         if form.consulta_api.data:
             form.cantidad_from.render_kw = {'readonly':True}
             return render_template(
