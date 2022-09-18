@@ -4,7 +4,8 @@ from flask import flash ,redirect, render_template, request, url_for
 from . import MONEDAS, app
 from . import RUTA
 from .forms import ComprasForm
-from .models import DBManager, CriptoModel
+from .models import CriptoModel, DBManager
+from .functions import consulta_saldo
 
 @app.route('/')
 def movimientos():
@@ -46,12 +47,7 @@ def comprar():
         cambio = cripto_cambio.consultar_cambio()
         cantidad_to = cantidad_from * cambio
 
-        consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from=? AND cantidad_from IS NOT NULL'
-        consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to=? AND cantidad_to IS NOT NULL'
-        parametros = (moneda_from,)
-        gastado = db.solicitudConParametros(consulta_from, parametros)
-        comprado = db.solicitudConParametros(consulta_to, parametros)
-        saldo = comprado - gastado
+        saldo = consulta_saldo(moneda_from)
         
         if moneda_from == 'EUR':
             saldo = float('inf')
@@ -60,7 +56,6 @@ def comprar():
             flash('Saldo insuficiente', category='warning')
             return redirect(url_for('comprar'))
 
-            """ TODO:Revisar el flujo del programa y hacer el codigo para actualizar el valor del saldo de la moneda to """
         if form.consulta_api.data:
             form.cantidad_from.render_kw = {'readonly':True}
             return render_template(
@@ -108,6 +103,8 @@ def status():
         cantidad_from = db.solicitudConParametros(consulta_from,params=parametros)
         cantidad_to = db.solicitudConParametros(consulta_to, params=parametros)
         saldo_cripto = cantidad_to - cantidad_from
+
+        saldo_cripto = consulta_saldo(moneda)
 
         if moneda == 'EUR':
             total_euros = cantidad_from
