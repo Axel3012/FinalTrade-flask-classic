@@ -46,28 +46,21 @@ def comprar():
         cambio = cripto_cambio.consultar_cambio()
         cantidad_to = cantidad_from * cambio
 
-        consulta_saldo = 'SELECT saldo FROM coins WHERE moneda=?'
-        params_saldo = (moneda_from,)
-        saldo_from = db.solicitudConParametros(
-            consulta=consulta_saldo, params=params_saldo)
+        consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from=? AND cantidad_from IS NOT NULL'
+        consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to=? AND cantidad_to IS NOT NULL'
+        parametros = (moneda_from,)
+        gastado = db.solicitudConParametros(consulta_from, parametros)
+        comprado = db.solicitudConParametros(consulta_to, parametros)
+        saldo = comprado - gastado
         
-        if saldo_from < cantidad_from:
+        if moneda_from == 'EUR':
+            saldo = float('inf')
+
+        if saldo < cantidad_from:
             flash('Saldo insuficiente', category='warning')
             return redirect(url_for('comprar'))
 
-        consulta_update = 'UPDATE coins SET saldo=? WHERE moneda=?'
-        params_update = (nuevo_saldo_from, moneda_from)
-        nuevo_saldo_from = saldo_from - cantidad_from
-        update = db.consultaConParametros(
-            consulta=consulta_update, params=params_update)
-
-        if not update:
-            return render_template(
-                'form_compra.html', form=form, id=id, errores=[
-                    'Ha fallado la operación de guardar en la base de datos'])
-
             """ TODO:Revisar el flujo del programa y hacer el codigo para actualizar el valor del saldo de la moneda to """
-
         if form.consulta_api.data:
             form.cantidad_from.render_kw = {'readonly':True}
             return render_template(
@@ -113,12 +106,12 @@ def status():
         consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to=? AND cantidad_to IS NOT NULL'
         parametros = (moneda,)
         cantidad_from = db.solicitudConParametros(consulta_from,params=parametros)
+        cantidad_to = db.solicitudConParametros(consulta_to, params=parametros)
+        saldo_cripto = cantidad_to - cantidad_from
+
         if moneda == 'EUR':
             total_euros = cantidad_from
-        cantidad_to = db.solicitudConParametros(consulta_to, params=parametros)
-        print(moneda)
-        print(cantidad_to, cantidad_from)
-        saldo_cripto = cantidad_to - cantidad_from
+        
         cripto_cambio.moneda_from = moneda
         cripto_cambio.moneda_to = 'EUR'
         cambio_status = cripto_cambio.consultar_cambio()
