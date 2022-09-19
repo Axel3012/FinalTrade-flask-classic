@@ -10,3 +10,7 @@ def consulta_saldo(moneda):
     comprado = db.solicitudConParametros(consulta_to, parametros)
     saldo = comprado - gastado
     return saldo, gastado
+
+""" TODO:Hacer la funcion del formateo de las cantidades """
+def formato_numero():
+    pass

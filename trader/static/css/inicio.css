@@ -1,6 +1,6 @@
 table.paper {
   width: 100%;
-  max-width: 830px;
+  max-width: 900px;
   justify-content: center;
 }
 
@@ -11,6 +11,10 @@ table.paper {
 
 .numero {
   text-align: right;
+}
+
+.moneda {
+  text-align: center;
 }
 
 .acciones-inicio {

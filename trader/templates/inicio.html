@@ -14,9 +14,9 @@ Listado de movimientos
   <tr>
     <th class="titulo-tabla">Fecha</th>
     <th class="titulo-tabla">Hora</th>
-    <th class="titulo-tabla">Moneda From →</th>
+    <th class="titulo-tabla moneda">Moneda From →</th>
     <th class="titulo-tabla numero">= Q0</th>
-    <th class="titulo-tabla">→ Moneda To</th>
+    <th class="titulo-tabla moneda">→ Moneda To</th>
     <th class="titulo-tabla numero">= Q1</th>
     <th class="titulo-tabla numero">P.U</th>
   </tr>
@@ -37,9 +37,9 @@ Listado de movimientos
         ---
       {% endif %}     
     </td>
-    <td> {{ mov.moneda_from }} </td>
+    <td class="moneda"> {{ mov.moneda_from }} </td>
     <td class="numero">{{ mov.cantidad_from }}</td>
-    <td> {{ mov.moneda_to }} </td>
+    <td class="moneda"> {{ mov.moneda_to }} </td>
     <td class="numero">{{ mov.cantidad_to }}</td>
     <td class="numero"> {{ (mov.cantidad_from / mov.cantidad_to)|round(3, 'common') }} </td>
   </tr>

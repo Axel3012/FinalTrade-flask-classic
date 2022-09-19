@@ -60,8 +60,8 @@ def comprar():
             form.cantidad_from.render_kw = {'readonly':True}
             return render_template(
                 'form_compra.html', form = form,
-                    cantidad_to = cantidad_to,
-                    precio_unitario = cambio)
+                    cantidad_to = round(cantidad_to,5),
+                    precio_unitario = round(cambio,5))
 
         elif form.cancelar.data:
             return redirect(url_for('comprar'))
@@ -76,9 +76,9 @@ def comprar():
             params = (
                 fecha,
                 str(hora),
-                form.moneda_from.data,
+                moneda_from,
                 cantidad_from,
-                form.moneda_to.data,
+                moneda_to,
                 cantidad_to)   
             resultado = db.consultaConParametros(consulta, params)
             
