@@ -47,7 +47,7 @@ def comprar():
         cambio = cripto_cambio.consultar_cambio()
         cantidad_to = cantidad_from * cambio
 
-        saldo = consulta_saldo(moneda_from)
+        saldo, gastado = consulta_saldo(moneda_from)
         
         if moneda_from == 'EUR':
             saldo = float('inf')
@@ -97,14 +97,7 @@ def status():
     valor_criptos_euros = []
     for moneda in MONEDAS:
         moneda = moneda[0]
-        consulta_from = 'SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from=? AND cantidad_from IS NOT NULL'
-        consulta_to = 'SELECT SUM(cantidad_to) FROM movimientos WHERE moneda_to=? AND cantidad_to IS NOT NULL'
-        parametros = (moneda,)
-        cantidad_from = db.solicitudConParametros(consulta_from,params=parametros)
-        cantidad_to = db.solicitudConParametros(consulta_to, params=parametros)
-        saldo_cripto = cantidad_to - cantidad_from
-
-        saldo_cripto = consulta_saldo(moneda)
+        saldo_cripto, cantidad_from = consulta_saldo(moneda)
 
         if moneda == 'EUR':
             total_euros = cantidad_from
@@ -125,10 +118,3 @@ def status():
 def wallet():
     return 'Cadidad de Euros o criptomonedas disponibles'
     
-@app.route('/deposito',methods=['GET','POST'])
-def deposito():
-    '''
-    Este metodo agrega euros a el wallet del cliente
-    lo hace con el formato de un formulario de tarjeta de credito
-    '''
-    return 'Deposito a la cuenta en euros'
