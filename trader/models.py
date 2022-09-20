@@ -12,9 +12,10 @@ class DBManager:
         self.ruta = ruta
 
     def consultaSQL(self, consulta):
-        """ 
-        TODO Colocar el Try/Except
-        """
+        '''
+        Este metodo devuelve los datos de la base de datos
+        en base a una consulta 
+        '''
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()  
         cursor.execute(consulta)
@@ -36,6 +37,9 @@ class DBManager:
         return self.movimientos
 
     def consultaConParametros(self, consulta, params):
+        '''
+        Este metodo resive una consulta sql con datos y los ejecuta en la base de datos
+        '''
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()
         resultado = False
@@ -51,6 +55,11 @@ class DBManager:
         return resultado
   
     def solicitudConParametros(self, consulta, params):
+        '''
+        Este metodo resive una consulta sql con datos y los ejecuta en la base de datos
+        y debuelve el dato solicitado
+
+        '''
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()
         resultado = 0
@@ -60,7 +69,6 @@ class DBManager:
             dato = dato[0]
             if dato == None:
                 dato = 0
-            print(dato)
             resultado = dato
         except Exception as error:
             print("ERROR DB:", error)
